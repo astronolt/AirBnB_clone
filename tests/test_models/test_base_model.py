@@ -7,22 +7,33 @@ Tests for the base_model class
 from datetime import datetime
 from unittest import TestCase
 
+from models.base_model import BaseModel
+
 
 class TestBaseModel(TestCase):
     def test_create(self):
         """Test creating an instance of the BaseModel class
         """
-        from models.base_model import BaseModel
         b = BaseModel()
         self.assertIsInstance(b, BaseModel)
         self.assertIs(type(b.created_at), datetime)
         self.assertIs(type(b.updated_at), datetime)
         self.assertIsNotNone(b.id)
 
+    def test_create_with_kwargs(self):
+        """Test creating an instance of the BaseModel class with kwargs
+        """
+        b = BaseModel(id="123", created_at=datetime.now().isoformat(),
+                      updated_at=datetime.now().isoformat())
+        self.assertIsInstance(b, BaseModel)
+        self.assertIsInstance(b.id, str)
+        self.assertEqual(b.id, "123")
+        self.assertIsInstance(b.created_at, datetime)
+        self.assertIsInstance(b.updated_at, datetime)
+
     def test_str(self):
         """Test the __str__ method
         """
-        from models.base_model import BaseModel
         b = BaseModel()
         self.assertEqual(str(b), "[BaseModel] ({}) {}".format(
             b.id, b.__dict__))
@@ -30,16 +41,14 @@ class TestBaseModel(TestCase):
     def test_save(self):
         """Test the save method
         """
-        from models.base_model import BaseModel
         b = BaseModel()
         old = b.updated_at
         b.save()
         self.assertNotEqual(old, b.updated_at)
-    
+
     def test_to_dict(self):
         """Test the to_dict method
         """
-        from models.base_model import BaseModel
         b = BaseModel()
         d = b.to_dict()
         self.assertIs(type(d), dict)

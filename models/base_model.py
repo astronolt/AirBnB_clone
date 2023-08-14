@@ -14,12 +14,21 @@ class BaseModel:
     Base model class for all other models
     """
 
-    def __init__(self) -> None:
+    def __init__(self, *args, **kwargs) -> None:
         """Initializing the base model instance
         """
         self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        self.created_at = self.updated_at = datetime.now()
+        if kwargs:
+            created_at = kwargs.pop("created_at", None)
+            updated_at = kwargs.pop("updated_at", None)
+            self.created_at = datetime.strptime(
+                created_at, "%Y-%m-%dT%H:%M:%S.%f") \
+                if created_at else datetime.now()
+            self.updated_at = datetime.strptime(
+                updated_at, "%Y-%m-%dT%H:%M:%S.%f") \
+                if updated_at else datetime.now()
+            self.id = kwargs.pop("id", str(uuid.uuid4()))
 
     def __str__(self):
         """Formal representation of a model object
