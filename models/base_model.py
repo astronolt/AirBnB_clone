@@ -4,8 +4,8 @@
 Base model module
 """
 
-from datetime import datetime
 import uuid
+from datetime import datetime
 
 
 class BaseModel:
