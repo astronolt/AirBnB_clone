@@ -35,3 +35,15 @@ class TestBaseModel(TestCase):
         old = b.updated_at
         b.save()
         self.assertNotEqual(old, b.updated_at)
+    
+    def test_to_dict(self):
+        """Test the to_dict method
+        """
+        from models.base_model import BaseModel
+        b = BaseModel()
+        d = b.to_dict()
+        self.assertIs(type(d), dict)
+        self.assertEqual(d["__class__"], "BaseModel")
+        self.assertEqual(d["created_at"], b.created_at.isoformat())
+        self.assertEqual(d["updated_at"], b.updated_at.isoformat())
+        self.assertEqual(d["id"], b.id)

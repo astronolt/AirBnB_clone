@@ -4,6 +4,7 @@
 Base model module
 """
 
+from copy import deepcopy
 import uuid
 from datetime import datetime
 
@@ -34,7 +35,7 @@ class BaseModel:
     def to_dict(self):
         """Returns a JSON representation of this model
         """
-        obj = self.__dict__
+        obj = deepcopy(self.__dict__)
         obj["__class__"] = self.__class__.__name__
         obj['created_at'] = self.created_at.isoformat()
         obj['updated_at'] = self.updated_at.isoformat()
