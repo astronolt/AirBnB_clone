@@ -5,6 +5,7 @@ Tests for the base_model class
 """
 
 from datetime import datetime
+import os
 from unittest import TestCase
 
 from models.base_model import BaseModel
@@ -12,6 +13,15 @@ from models.engine.file_storage import FileStorage
 
 
 class TestBaseModel(TestCase):
+
+    def tearDown(self) -> None:
+        """Tears down the test
+        """
+        try:
+            os.remove(FileStorage._FileStorage__file_path)
+        except FileNotFoundError:
+            pass
+
     def test_create(self):
         """Test creating an instance of the BaseModel class
         """
