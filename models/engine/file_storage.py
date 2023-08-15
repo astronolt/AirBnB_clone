@@ -13,7 +13,7 @@ class FileStorage:
     FileStorage class
     """
 
-    __file_path = "file.json"
+    __file_path = ""
     __objects = {}
 
     def all(self):
@@ -46,6 +46,8 @@ class FileStorage:
         """
         try:
             with open(self.__file_path, "r") as f:
-                self.__objects = json.load(f)
+                content = f.read()
+                if content:
+                    self.__objects = json.loads(content)
         except FileNotFoundError:
             pass

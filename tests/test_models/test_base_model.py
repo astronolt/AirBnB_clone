@@ -8,6 +8,7 @@ from datetime import datetime
 from unittest import TestCase
 
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
 
 
 class TestBaseModel(TestCase):
@@ -43,6 +44,7 @@ class TestBaseModel(TestCase):
         """
         b = BaseModel()
         old = b.updated_at
+        FileStorage._FileStorage__file_path = "test.json"
         b.save()
         self.assertNotEqual(old, b.updated_at)
 

@@ -69,3 +69,39 @@ class TestFileStorage(TestCase):
         fs.reload()
         self.assertEqual(
             fs.all(), {"BaseModel.{}".format(bm.id): bm.to_dict()})
+
+    def test_reload_no_file(self):
+        """Tests the reload method with no file"""
+        fs = FileStorage()
+        fs.reload()
+        self.assertEqual(fs.all(), {})
+    
+    def test_reload_empty_file(self):
+        """Tests the reload method with an empty file"""
+        fs = FileStorage()
+        with open(fs._FileStorage__file_path, "w") as f:
+            f.write("")
+        fs.reload()
+        self.assertEqual(fs.all(), {})
+    
+    def test_reloaded_objects_are_same_as_create(self):
+        """Tests that reloaded objects are the same as the created objects"""
+        """
+        Tests that reloaded objects are the same as the created objects
+        """
+        fs = FileStorage()
+        bm = BaseModel()
+        fs.new(bm)
+        fs.save()
+        fs.reload()
+        self.assertEqual(
+            fs.all()["BaseModel.{}".format(bm.id)]["id"], bm.id)
+        self.assertEqual(
+            fs.all()["BaseModel.{}".format(bm.id)]["created_at"],
+            bm.created_at.isoformat())
+        self.assertEqual(
+            fs.all()["BaseModel.{}".format(bm.id)]["updated_at"],
+            bm.updated_at.isoformat())
+        self.assertEqual(
+            fs.all()["BaseModel.{}".format(bm.id)]["__class__"],
+            bm.__class__.__name__)
