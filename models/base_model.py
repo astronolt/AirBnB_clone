@@ -8,6 +8,8 @@ from copy import deepcopy
 import uuid
 from datetime import datetime
 
+from . import storage
+
 
 class BaseModel:
     """
@@ -17,8 +19,6 @@ class BaseModel:
     def __init__(self, *args, **kwargs) -> None:
         """Initializing the base model instance
         """
-        self.id = str(uuid.uuid4())
-        self.created_at = self.updated_at = datetime.now()
         if kwargs:
             created_at = kwargs.pop("created_at", None)
             updated_at = kwargs.pop("updated_at", None)
@@ -29,6 +29,10 @@ class BaseModel:
                 updated_at, "%Y-%m-%dT%H:%M:%S.%f") \
                 if updated_at else datetime.now()
             self.id = kwargs.pop("id", str(uuid.uuid4()))
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = self.updated_at = datetime.now()
+            storage.new(self)
 
     def __str__(self):
         """Formal representation of a model object
@@ -40,6 +44,7 @@ class BaseModel:
         """Updates this model
         """
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """Returns a JSON representation of this model
