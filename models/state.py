@@ -4,5 +4,7 @@ from models.base_model import BaseModel
 
 
 class State(BaseModel):
-    """temp"""
+    """
+    State class
+    """
     name = ""
